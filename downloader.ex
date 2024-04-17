@@ -47,7 +47,10 @@ IO.puts("Program started")
 File.stream!("urls.csv")
 |> Stream.map(&String.trim/1)
 |> Enum.uniq()
-|> Task.async_stream(fn url -> Downloader.download_file(url) end, max_concurrency: 10)
+|> Task.async_stream(fn url -> Downloader.download_file(url) end,
+  max_concurrency: 2,
+  timeout: :infinity
+)
 |> Stream.run()
 
 IO.puts("Program finished")
